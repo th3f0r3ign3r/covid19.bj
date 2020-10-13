@@ -13,27 +13,17 @@ class cli_colors:
     bold = '\033[1m'
     underline = '\033[4m'
 
+def sysout(output=''):
+    sys.stdout.write(output + cli_colors.endc + '\n')
+
 gouvbjpage = requests.get('http://www.gouv.bj/coronavirus/')
 soup = BeautifulSoup(gouvbjpage.content,'html.parser')
-a = soup.find_all('h2',{'class': ['h1 adapt white alt','h1 adapt white']})
-x = "<h2 class='h1 adapt white'>"
-y = "<h2 class='h1 adapt white alt>"
-z = '</h2>'
+a = soup.find_all('h2',{'class': ['h1 adapt white left-5']})
 
-def extractN(z,y1,y2,y3):
-    return z.replace(y1,'').replace(y2,'').replace(y3,'')
-
-def sysout(output=''):
-    sys.stdout.write(output + '\n')
-
-cas = []
-
-for i in a:
-    bn = str(i)
-    cas.append(extractN(bn,x,y,z))
-
-sysout('\n')
-sysout(cli_colors.fail + 'Cas confirmés\t:' + cas[0])
-sysout(cli_colors.warning + 'Sous traitement\t:' + cas[1])
-sysout(cli_colors.fail + 'Cas guéris\t:' + cas[2])
-sysout(cli_colors.fail + 'Décès\t:' + cas[3])
+sysout(soup.find('title').text)
+sysout()
+sysout(cli_colors.fail + 'Cas confirmés\t:' + " " + a[0].text)
+sysout(cli_colors.warning + 'Sous traitement\t:' + " " + a[1].text)
+sysout(cli_colors.okgreen + 'Cas guéris\t:' + " " + a[2].text)
+sysout(cli_colors.header + 'Décès\t:' + " " + a[3].text)
+sysout()
